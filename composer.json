@@ -1,0 +1,20 @@
+{
+  "name": "yeesoft/yii2-yee-translation",
+  "description": "Yee CMS Translations Module",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "YeeSoft",
+      "email": "makitrataras@gmail.com"
+    }
+  ],
+  "require": {
+    "yeesoft/yii2-yee-core": "dev-master",
+    "webvimark/grid-page-size": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "yeesoft\\translation\\": ""
+    }
+  }
+}
