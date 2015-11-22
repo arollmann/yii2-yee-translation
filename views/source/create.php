@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model yeesoft\translation\models\MessageSource */
 
-$this->title = 'Create Message Source';
-$this->params['breadcrumbs'][] = ['label' => 'Message Sources', 'url' => ['index']];
+$this->title = Yii::t('yee/translation', 'Create Message Source');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('yee/translation', 'Message Translation'), 'url' => ['/translation/default/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

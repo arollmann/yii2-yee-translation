@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "message".
  *
  * @property integer $id
+ * @property integer $source_id
  * @property string $language
  * @property string $translation
  *
@@ -29,22 +30,10 @@ class Message extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'language'], 'required'],
-            [['id'], 'integer'],
+            [['source_id', 'language'], 'required'],
+            [['source_id'], 'integer'],
             [['translation'], 'string'],
             [['language'], 'string', 'max' => 16]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('yee/translation', 'ID'),
-            'language' => Yii::t('yee/translation', 'Language'),
-            'translation' => Yii::t('yee/translation', 'Translation'),
         ];
     }
 
@@ -53,6 +42,36 @@ class Message extends \yii\db\ActiveRecord
      */
     public function getSource()
     {
-        return $this->hasOne(MessageSource::className(), ['id' => 'id']);
+        return $this->hasOne(MessageSource::className(), ['id' => 'source_id']);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function initMessages($category, $language)
+    {
+        $messageIds = MessageSource::getMessageIdsByCategory($category);
+
+        $translations = Message::find()
+            ->select('source_id')
+            ->andWhere(['IN', 'source_id', $messageIds])
+            ->andWhere(['language' => $language])
+            ->all();
+
+        $translationIds = array_map(function($translation){
+            return $translation->source_id;
+        }, $translations);
+
+        $translationsToCreate = array_diff($messageIds, $translationIds);
+
+        foreach ($translationsToCreate as $translationId) {
+            $message = new Message();
+            $message->source_id = $translationId;
+            $message->language = $language;
+            $message->translation = '';
+            $message->save();
+        }
+
+        return true;
     }
 }

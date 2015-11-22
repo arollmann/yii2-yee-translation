@@ -21,13 +21,14 @@ class m150320_102452_init_translations extends Migration
         ], $tableOptions);
 
         $this->createTable('message', [
-            'id' => Schema::TYPE_INTEGER,
+            'id' => 'pk',
+            'source_id' => Schema::TYPE_INTEGER,
             'language' => Schema::TYPE_STRING . '(16) COLLATE utf8_unicode_ci NOT NULL',
             'translation' => Schema::TYPE_TEXT . ' DEFAULT NULL',
         ], $tableOptions);
 
-        $this->addPrimaryKey('message_pk', 'message', ['id', 'language']);
-        $this->addForeignKey('fk_message_source_message', 'message', 'id', 'message_source', 'id', 'CASCADE', 'RESTRICT');
+        $this->createIndex('message_index', 'message', ['source_id', 'language']);
+        $this->addForeignKey('fk_message_source_message', 'message', 'source_id', 'message_source', 'id', 'CASCADE', 'RESTRICT');
 
     }
 

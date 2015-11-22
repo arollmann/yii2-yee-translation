@@ -1,17 +1,12 @@
 <?php
 
-use webvimark\extensions\GridPageSize\GridPageSize;
-use yeesoft\grid\GridView;
 use yeesoft\helpers\Html;
-use yeesoft\translation\models\Message;
-use yii\helpers\Url;
-use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
+use yeesoft\models\User;
 
 /* @var $this yii\web\View */
-/* @var $searchModel yeesoft\translation\models\MessageSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Messages';
+$this->title = Yii::t('yee/translation', 'Message Translation');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="message-index">
@@ -19,64 +14,92 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-sm-12">
             <h3 class="lte-hide-title page-title"><?= Html::encode($this->title) ?></h3>
-            <?= Html::a('Add New', ['/translation/default/create'], ['class' => 'btn btn-sm btn-primary']) ?>
+            <?= Html::a(Yii::t('yee/translation', 'Add New Source Message'), ['/translation/source/create'], ['class' => 'btn btn-sm btn-primary']) ?>
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body translation">
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <?php
-                    /* Uncomment this to activate GridQuickLinks */
-                    /* echo GridQuickLinks::widget([
-                        'model' => Message::class,
-                        'searchModel' => $searchModel,
-                    ])*/
-                    ?>
-                </div>
+                    <ul class="list-group">
+                        <?php foreach ($categories as $category => $count) : ?>
+                            <li>
+                                <h4>
+                                    <b>[<?= strtoupper($category) ?>]</b>
+                                    <?= Yii::t('yee/translation', '{n, plural, =1{1 message} other{# messages}}', ['n' => $count])    ?>
+                                </h4>
 
-                <div class="col-sm-6 text-right">
-                    <?= GridPageSize::widget(['pjaxId' => 'message-grid-pjax']) ?>
+                                <?php foreach ($languages as $language => $languageLabel) : ?>
+                                    <?php $link    = ['/translation/default/index', 'category' => $category, 'translation' => $language] ?>
+                                    <?php $options = (($currentLanguage == $language) && ($currentCategory == $category)) ? ['class' => 'active'] : [] ?>
+                                    <?= Html::a("<span class='label label-default'>$languageLabel</span>", $link, $options) ?>
+                                <?php endforeach; ?>
+
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+
                 </div>
             </div>
+        </div>
 
-            <?php
-            Pjax::begin([
-                'id' => 'message-grid-pjax',
-            ])
-            ?>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
 
-            <?=
-            GridView::widget([
-                'id' => 'message-grid',
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'bulkActionOptions' => [
-                    'gridId' => 'message-grid',
-                    'actions' => [Url::to(['bulk-delete']) => 'Delete'] //Configure here you bulk actions
-                ],
-                'columns' => [
-                    ['class' => 'yii\grid\CheckboxColumn', 'options' => ['style' => 'width:10px']], [
-                        'class' => 'yeesoft\grid\columns\TitleActionColumn',
-                        'controller' => '/translation/default',
-                        'title' => function (Message $model) {
-                            return Html::a($model->id, ['view', 'id' => $model->id], ['data-pjax' => 0]);
-                        },
-                    ],
+                    <?php if (!$currentLanguage || !$currentCategory): ?>
+                        <h4>
+                            <?=Yii::t('yee/translation', 'Please, select message group and language to view translations...')?>
+                        </h4>
+                    <?php else: ?>
 
-                    'id',
-                    'language',
-                    'translation:ntext',
+                        <?php $form = ActiveForm::begin() ?>
 
-                ],
-            ]);
-            ?>
+                        <?php foreach ($messages as $index => $message) : ?>
+                            <?php
+                                $links = '';
+                                if (User::hasPermission('updateSourceMessages') && (!$message->source->immutable || User::hasPermission('updateImmutableSourceMessages'))) {
+                                    $links .= ' ' . Html::a('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', ['/translation/source/update', 'id' => $message->source_id]);
+                                }
+                            ?>
 
-            <?php Pjax::end() ?>
+                            <?= $form->field($message, "[$index]translation")->label($message->source->message . $links) ?>
+
+                        <?php endforeach; ?>
+
+                        <?php if (User::hasPermission('updateSourceMessages')): ?>
+                            <?= Html::submitButton(Yii::t('yee', 'Save All'), ['class' => 'btn btn-primary']) ?>
+                        <?php endif; ?>
+
+                        <?php ActiveForm::end() ?>
+
+                    <?php endif; ?>
+
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
+<?php
+$this->registerCss("
+    .translation li{
+        display: block;
+    }
 
+    .translation li a:hover{
+        text-decoration:none;
+    }
+
+    .translation li a:hover .label-default, .translation li a.active .label-default {
+        background-color: #36517B;
+    }
+    
+    .translation li a {
+        display: inline-block;
+        padding-bottom: 4px;
+    }
+");
