@@ -3,8 +3,8 @@
 namespace yeesoft\translation\controllers;
 
 use yeesoft\controllers\admin\BaseController;
-use Yii;
 use yeesoft\models\User;
+use Yii;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -12,7 +12,7 @@ use yii\web\ForbiddenHttpException;
  */
 class SourceController extends BaseController
 {
-    public $modelClass        = 'yeesoft\translation\models\MessageSource';
+    public $modelClass = 'yeesoft\translation\models\MessageSource';
     public $enableOnlyActions = ['update', 'create', 'delete'];
 
     protected function getRedirectPage($action, $model = null)
@@ -67,7 +67,7 @@ class SourceController extends BaseController
     {
         $model = $this->findModel($id);
 
-        if($model->immutable && !User::hasPermission('updateImmutableSourceMessages')){
+        if ($model->immutable && !User::hasPermission('updateImmutableSourceMessages')) {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
         }
 
@@ -76,7 +76,7 @@ class SourceController extends BaseController
                 $model->category = Yii::$app->request->post('category');
             }
 
-           // print_r($model);die;
+            // print_r($model);die;
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('crudMessage', 'Your item has been updated.');
@@ -98,7 +98,7 @@ class SourceController extends BaseController
     {
         $model = $this->findModel($id);
 
-        if($model->immutable && !User::hasPermission('updateImmutableSourceMessages')){
+        if ($model->immutable && !User::hasPermission('updateImmutableSourceMessages')) {
             throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
         }
 

@@ -3,19 +3,19 @@
 namespace yeesoft\translation\controllers;
 
 use yeesoft\controllers\admin\BaseController;
-use Yii;
-use yeesoft\translation\models\Message;
-use yii\base\Model;
-use yeesoft\translation\models\MessageSource;
 use yeesoft\helpers\LanguageHelper;
 use yeesoft\models\User;
+use yeesoft\translation\models\Message;
+use yeesoft\translation\models\MessageSource;
+use Yii;
+use yii\base\Model;
 
 /**
  * MessageController implements the CRUD actions for yeesoft\translation\models\Message model.
  */
 class DefaultController extends BaseController
 {
-    public $modelClass        = 'yeesoft\translation\models\Message';
+    public $modelClass = 'yeesoft\translation\models\Message';
     public $enableOnlyActions = ['index'];
 
     /**
@@ -26,7 +26,7 @@ class DefaultController extends BaseController
     {
         $sourceLanguage = 'en';
 
-        $languages  = LanguageHelper::getLanguages();
+        $languages = LanguageHelper::getLanguages();
         $categories = MessageSource::getMessageCategories();
 
         unset($languages[$sourceLanguage]);
@@ -46,8 +46,8 @@ class DefaultController extends BaseController
 
             Message::initMessages($currentCategory, $currentLanguage);
 
-            $messageIds   = MessageSource::getMessageIdsByCategory($currentCategory);
-            $sourceTable  = MessageSource::tableName();
+            $messageIds = MessageSource::getMessageIdsByCategory($currentCategory);
+            $sourceTable = MessageSource::tableName();
             $messageTable = Message::tableName();
 
             $messages = Message::find()
@@ -60,7 +60,8 @@ class DefaultController extends BaseController
         }
 
         if (User::hasPermission('updateTranslations') && Message::loadMultiple($messages, Yii::$app->request->post())
-            && Model::validateMultiple($messages)) {
+            && Model::validateMultiple($messages)
+        ) {
             foreach ($messages as $message) {
                 $message->save(false);
             }
@@ -70,11 +71,11 @@ class DefaultController extends BaseController
         }
 
         return $this->render('index', [
-                'messages' => $messages,
-                'languages' => $languages,
-                'categories' => $categories,
-                'currentLanguage' => $currentLanguage,
-                'currentCategory' => $currentCategory,
+            'messages' => $messages,
+            'languages' => $languages,
+            'categories' => $categories,
+            'currentLanguage' => $currentLanguage,
+            'currentCategory' => $currentCategory,
         ]);
     }
 }

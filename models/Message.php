@@ -58,7 +58,7 @@ class Message extends \yii\db\ActiveRecord
             ->andWhere(['language' => $language])
             ->all();
 
-        $translationIds = array_map(function($translation){
+        $translationIds = array_map(function ($translation) {
             return $translation->source_id;
         }, $translations);
 

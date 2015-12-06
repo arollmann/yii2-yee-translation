@@ -85,7 +85,7 @@ class MessageSource extends \yii\db\ActiveRecord
      */
     public static function getCategories()
     {
-        $sources =  MessageSource::find()
+        $sources = MessageSource::find()
             ->distinct()
             ->select(['category'])
             ->all();
@@ -113,7 +113,7 @@ class MessageSource extends \yii\db\ActiveRecord
     {
         $messages = MessageSource::getMessagesByCategory($category);
 
-        $ids = array_map(function($message){
+        $ids = array_map(function ($message) {
             return $message->id;
         }, $messages);
 
