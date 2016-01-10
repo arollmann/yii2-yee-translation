@@ -24,7 +24,7 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-        $sourceLanguage = 'en';
+        $sourceLanguage = 'en-US';
 
         $languages = LanguageHelper::getLanguages();
         $categories = MessageSource::getMessageCategories();
