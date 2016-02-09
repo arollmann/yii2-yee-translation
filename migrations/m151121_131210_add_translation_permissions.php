@@ -31,6 +31,7 @@ class m151121_131210_add_translation_permissions extends Migration
         $this->insert('auth_item_child', ['parent' => 'deleteSourceMessages', 'child' => '/admin/translation/source/delete']);
 
         $this->insert('auth_item_child', ['parent' => 'updateTranslations', 'child' => 'viewTranslations']);
+        $this->insert('auth_item_child', ['parent' => 'updateSourceMessages', 'child' => 'viewTranslations']);
         $this->insert('auth_item_child', ['parent' => 'updateSourceMessages', 'child' => 'updateTranslations']);
         $this->insert('auth_item_child', ['parent' => 'createSourceMessages', 'child' => 'viewTranslations']);
         $this->insert('auth_item_child', ['parent' => 'createSourceMessages', 'child' => 'updateSourceMessages']);
@@ -55,6 +56,7 @@ class m151121_131210_add_translation_permissions extends Migration
         $this->delete('auth_item_child', ['parent' => 'administrator', 'child' => 'deleteSourceMessages']);
 
         $this->delete('auth_item_child', ['parent' => 'updateTranslations', 'child' => 'viewTranslations']);
+        $this->delete('auth_item_child', ['parent' => 'updateSourceMessages', 'child' => 'viewTranslations']);
         $this->delete('auth_item_child', ['parent' => 'updateSourceMessages', 'child' => 'updateTranslations']);
         $this->delete('auth_item_child', ['parent' => 'createSourceMessages', 'child' => 'viewTranslations']);
         $this->delete('auth_item_child', ['parent' => 'createSourceMessages', 'child' => 'updateSourceMessages']);
