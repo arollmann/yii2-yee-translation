@@ -4,11 +4,11 @@ use yeesoft\helpers\Html;
 use yeesoft\translation\models\MessageSource;
 use yii\helpers\ArrayHelper;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yeesoft\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model yeesoft\translation\models\MessageSource */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $form yeesoft\widgets\ActiveForm */
 ?>
 
     <div class="message-source-form">

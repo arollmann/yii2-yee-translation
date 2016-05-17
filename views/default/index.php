@@ -2,9 +2,9 @@
 
 use yeesoft\helpers\Html;
 use yeesoft\models\User;
-use yii\widgets\ActiveForm;
+use yeesoft\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
+/* @var $this yeesoft\web\View */
 
 $this->title = Yii::t('yee/translation', 'Message Translation');
 $this->params['breadcrumbs'][] = $this->title;

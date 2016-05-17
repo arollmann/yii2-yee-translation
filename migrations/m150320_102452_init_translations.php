@@ -1,11 +1,12 @@
 <?php
 
 use yii\db\Migration;
-use yii\db\Schema;
 
 class m150320_102452_init_translations extends Migration
 {
-
+    const MESSAGE_TABLE = '{{%message}}';
+    const MESSAGE_SOURCE_TABLE = '{{%message_source}}';
+    
     public function up()
     {
         $tableOptions = null;
@@ -13,31 +14,31 @@ class m150320_102452_init_translations extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('message_source', [
-            'id' => 'pk',
-            'category' => Schema::TYPE_STRING . '(32) COLLATE utf8_unicode_ci NOT NULL',
-            'message' => Schema::TYPE_TEXT . ' NOT NULL',
-            'immutable' => Schema::TYPE_INTEGER . '(1) DEFAULT 0',
+        $this->createTable(self::MESSAGE_SOURCE_TABLE, [
+            'id' => $this->primaryKey(),
+            'category' => $this->string(32)->notNull(),
+            'message' => $this->text(),
+            'immutable' => $this->integer(1)->defaultValue(0),
         ], $tableOptions);
 
-        $this->createTable('message', [
-            'id' => 'pk',
-            'source_id' => Schema::TYPE_INTEGER,
-            'language' => Schema::TYPE_STRING . '(16) COLLATE utf8_unicode_ci NOT NULL',
-            'translation' => Schema::TYPE_TEXT . ' DEFAULT NULL',
+        $this->createTable(self::MESSAGE_TABLE, [
+            'id' => $this->primaryKey(),
+            'source_id' => $this->integer(),
+            'language' => $this->string(16)->notNull(),
+            'translation' => $this->text(),
         ], $tableOptions);
 
-        $this->createIndex('message_index', 'message', ['source_id', 'language']);
-        $this->addForeignKey('fk_message_source_message', 'message', 'source_id', 'message_source', 'id', 'CASCADE', 'RESTRICT');
+        $this->createIndex('message_index', self::MESSAGE_TABLE, ['source_id', 'language']);
+        $this->addForeignKey('fk_message_source_message', self::MESSAGE_TABLE, 'source_id', self::MESSAGE_SOURCE_TABLE, 'id', 'CASCADE', 'RESTRICT');
 
     }
 
     public function down()
     {
-        $this->dropForeignKey('fk_message_source_message', 'message');
+        $this->dropForeignKey('fk_message_source_message', self::MESSAGE_TABLE);
 
-        $this->dropTable('message');
-        $this->dropTable('message_source');
+        $this->dropTable(self::MESSAGE_TABLE);
+        $this->dropTable(self::MESSAGE_SOURCE_TABLE);
 
     }
 }

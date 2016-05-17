@@ -3,7 +3,6 @@
 namespace yeesoft\translation\controllers;
 
 use yeesoft\controllers\admin\BaseController;
-use yeesoft\helpers\LanguageHelper;
 use yeesoft\models\User;
 use yeesoft\translation\models\Message;
 use yeesoft\translation\models\MessageSource;
@@ -26,7 +25,7 @@ class DefaultController extends BaseController
     {
         $sourceLanguage = 'en-US';
 
-        $languages = LanguageHelper::getLanguages();
+        $languages = Yii::$app->yee->languages;
         $categories = MessageSource::getMessageCategories();
 
         unset($languages[$sourceLanguage]);

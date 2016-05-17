@@ -15,7 +15,7 @@ use yii\db\Query;
  *
  * @property Message[] $messages
  */
-class MessageSource extends \yii\db\ActiveRecord
+class MessageSource extends \yeesoft\db\ActiveRecord
 {
 
     /**
@@ -23,7 +23,7 @@ class MessageSource extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'message_source';
+        return '{{%message_source}}';
     }
 
     /**

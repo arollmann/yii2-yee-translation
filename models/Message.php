@@ -14,14 +14,14 @@ use Yii;
  *
  * @property MessageSource $id0
  */
-class Message extends \yii\db\ActiveRecord
+class Message extends \yeesoft\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'message';
+        return '{{%message}}';
     }
 
     /**
