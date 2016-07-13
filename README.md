@@ -38,7 +38,7 @@ Configuration
 ```php
 'modules'=>[
 	'translation' => [
-		'class' => 'yeesoft\page\TranslationModule',
+		'class' => 'yeesoft\translation\TranslationModule',
 	],
 ],
 ```
